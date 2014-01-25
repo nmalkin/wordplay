@@ -64,11 +64,13 @@ var server = http.createServer();
 sockjs_client_connect.installHandlers(server, { prefix: '/client-connect' });
 server.listen(process.env.PORT || WEBSOCKET_PORT); // Listen on the given port number
 
+
 // load the list of words
 //  var fs = require('fs');
 //  var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
 console.log('Loading words');
-var validWords = require('./dict/english_all.json');
+var anagrams = require('./dict/english_all.json');
+var validWords = Object.keys(anagrams);
 console.log('... done.');
 
 var currentWord = "";
@@ -181,9 +183,22 @@ function newGame() {
 	// 1. clear all the state
 	clients = new Array();
 	
-	// TODO: 2. pick new letters
+	// 2. pick new letters
 	var numLetters = 15;
-	
+	var allLetters = "";
+	while (allLetters.length < numLetters) {
+		// get a list of possible words that would bring us closer to our goal of numLetters letters
+		var availableWords = validWords.filter(function(element, index, array) { 
+			return (element.length + allLetters.length <= numLetters); 
+		});
+		
+		if (availableWords.length < 1)
+			availableWords = "abcdefghijklmnopqrstuvwxyz".split('');
+		
+		// append a random word from the list of available words
+		var i = Math.floor(Math.random() * availableWords.length);
+		allLetters += availableWords[i];
+	}
 	
 	// TODO: 3. notify all clients (is this needed?)
 	currentWord = allLetters;
@@ -226,8 +241,7 @@ function register() {
     var _player = {
 		id: _id,
 		score: 0,
-		foundWords: new Array(),
-        socket: 0
+		foundWords: new Array()
 	};
 	clients[_id] = (_player);
 	return _player;
@@ -261,14 +275,6 @@ app.get('/words', function(req, res) {
 	}
 });
 
-app.get('/check', function(req, res) {
-	res.send({ cword: currentWord, isAnagram: isAnagramOfCurrentWord(req.query.id) });
-});
+*/
 
-app.get('/time', function(req, res) { 
-	res.send({ secondsRemaining: 1 });
-});
-
-newGame();
-//console.log(getAnagrams(currentWord));
 app.listen(process.env.PORT || HTTP_PORT);
