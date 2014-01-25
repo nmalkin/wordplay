@@ -106,11 +106,7 @@ function getGame(clientId) {
 
 // web callback functions ======================================================
 
-app.use(express.static(__dirname + '/public'));
-
-app.get('/', function (req, res) {
-    res.send('Hello World');
-});
+app.use(express.static(__dirname + '/client'));
 
 app.get('/register', function(req, res) {
 	res.send(register());
