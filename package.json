@@ -8,5 +8,5 @@
   "dependencies" : ["express", "async", "sockjs"],
   "repository" : {"type": "git", "url": "git://github.com/nmalkin/wordplay.git"},
   "main" : "server.js",
-  "version" : "0.1"
+  "version" : "1.0.0"
 }
