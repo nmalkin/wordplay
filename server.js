@@ -6,11 +6,48 @@
 //  var fs = require('fs');
 //  var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
 console.log('Loading words');
-var validWords = require('./dict/english_all.json');
+var anagrams = require('./dict/english_all.json');
+var validWords = Object.keys(anagrams);
 console.log('... done.');
 
 var currentWord = "";
 var clients = {};
+var gameTime = new Date();
+var gameLength = 60 /* seconds */ ;
+
+function sortLetters(word) { return word.split('').sort().join(''); }
+
+function getAnagrams(word) {
+	// 1. sort the letters
+	var sortedwords = [];
+	for (var i = 0; i < validWords.length; ++i)
+	{
+		var w = validWords[i];
+		var sortedword = sortLetters(w);
+		if (sortedwords[sortedword] === undefined)
+			sortedwords[sortedword] = new Array();
+		sortedwords[sortedword].push(w);
+	}
+	//console.log(sortedwords);
+	
+	var anagrams = new Array();
+	var wc = ""+sortLetters(word);
+	console.log(word);
+	while (wc.length >= 3)
+	{
+		if (sortedwords[wc] != undefined) {
+			console.log(wc, sortedwords[wc]);
+			for (var i = 0; i < sortedwords[wc].length; ++i) {
+				var w = sortedwords[wc][i];
+				anagrams.push(w);
+			}
+		}
+		wc = wc.substring(0, wc.length - 1);
+	}
+	
+	return anagrams;
+}
+
 
 // utility function to shuffle an array
 function shuffle(array) {
@@ -46,15 +83,28 @@ function newId() {
 // starts a new game on the server (Clears all the state and picks new letters)
 function newGame() {
 
-	// TODO: 1. clear all the state
+	// 1. clear all the state
 	clients = new Array();
 	
-	// TODO: 2. pick new letters
+	// 2. pick new letters
 	var numLetters = 15;
-	
+	var allLetters = "";
+	while (allLetters.length < numLetters) {
+		// get a list of possible words that would bring us closer to our goal of numLetters letters
+		var availableWords = validWords.filter(function(element, index, array) { 
+			return (element.length + allLetters.length <= numLetters); 
+		});
+		
+		if (availableWords.length < 1)
+			availableWords = "abcdefghijklmnopqrstuvwxyz".split('');
+		
+		// append a random word from the list of available words
+		var i = Math.floor(Math.random() * availableWords.length);
+		allLetters += availableWords[i];
+	}
 	
 	// TODO: 3. notify all clients (is this needed?)
-
+	currentWord = allLetters;
 }
 
 // called when a client wants to check if they got the word correctly
@@ -110,6 +160,11 @@ app.get('/', function (req, res) {
     res.send('Hello World');
 });
 
+app.get('/new', function (req, res) {
+	newGame();
+	res.send({ word: currentWord, len: currentWord.length, ng: getAnagrams(currentWord) });
+});
+
 app.get('/register', function(req, res) {
 	res.send(register());
 });
@@ -123,6 +178,10 @@ app.get('/words', function(req, res) {
 	for (var word in array) {
 		res.send(word + "\n");
 	}
+});
+
+app.get('/time', function(req, res) { 
+	res.send({ secondsRemaining: 1 });
 });
 
 app.listen(process.env.PORT);
