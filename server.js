@@ -19,20 +19,21 @@ function sortLetters(word) { return word.split('').sort().join(''); }
 
 function getAnagrams(word) {
 	// 1. sort the letters
-	var sortedwords = [];
+	var sortedwords = {};
 	for (var i = 0; i < validWords.length; ++i)
 	{
 		var w = validWords[i];
 		var sortedword = sortLetters(w);
-		if (sortedwords[sortedword] === undefined)
+		if (sortedwords[sortedword] == undefined)
 			sortedwords[sortedword] = new Array();
 		sortedwords[sortedword].push(w);
 	}
 	//console.log(sortedwords);
-	
-	var anagrams = new Array();
-	var wc = ""+sortLetters(word);
+	/*
+	var anagrams = [];
+	var wc = sortLetters(word);
 	console.log(word);
+	console.log(sortedwords);
 	while (wc.length >= 3)
 	{
 		if (sortedwords[wc] != undefined) {
@@ -44,8 +45,41 @@ function getAnagrams(word) {
 		}
 		wc = wc.substring(0, wc.length - 1);
 	}
-	
+	*/
 	return anagrams;
+}
+
+function arrayRemoveIndex(array, index)
+{
+	var newArray = new Array();
+	for (var i = 0; i < index; ++i)
+		newArray[i] = array[i];
+	for (var i = index; i < array.length; ++i)
+		newArray[i-1] = array[i];
+	return newArray;
+}
+
+function isAnagramOfCurrentWord(word)
+{
+	console.log(word);
+
+	var array1 = word.split('');
+	var array2 = currentWord.split(''); 
+	var i=0, j=0;
+	while (i < array1.length)
+	{
+		j = array2.indexOf(array1[i]);
+		if (j >= 0)
+			array2 = arrayRemoveIndex(array2, j);
+		else 
+			return false; // user used an invalid letter
+		++i;
+	}
+	
+	if (validWords.indexOf(word) >= 0) {
+		return true;
+	}
+	return false;
 }
 
 
@@ -82,7 +116,7 @@ function newId() {
 
 // starts a new game on the server (Clears all the state and picks new letters)
 function newGame() {
-
+	console.log("newGame");
 	// 1. clear all the state
 	clients = new Array();
 	
@@ -105,6 +139,7 @@ function newGame() {
 	
 	// TODO: 3. notify all clients (is this needed?)
 	currentWord = allLetters;
+	console.log(currentWord);
 }
 
 // called when a client wants to check if they got the word correctly
@@ -178,8 +213,15 @@ app.get('/words', function(req, res) {
 	}
 });
 
+app.get('/check', function(req, res) {
+	res.send({ cword: currentWord, isAnagram: isAnagramOfCurrentWord(req.query.id) });
+});
+
 app.get('/time', function(req, res) { 
 	res.send({ secondsRemaining: 1 });
 });
+
+newGame();
+//console.log(getAnagrams(currentWord));
 
 app.listen(process.env.PORT || 8888);
