@@ -31,6 +31,7 @@ function postWord(f) {
     // Called when the form is submitted. Argument f is a function to
     // handle word confirmation/rejection from the server.
     //
+    throw "Not implemented";
     var uid = $( 'name="uid"' ).val();
     var guess = $( 'name="guess"' ).val();
     // Send the uid and guess to the server here, calling f() with the
