@@ -1,12 +1,26 @@
 {
-  "name" : "wordplay",
-  "description" : "Wordplay game.",
-  "homepage" : "http://localhost/",
-  "keywords" : [],
-  "author" : "wordplay team <wordplay@localhost>",
-  "contributors" : [],
-  "dependencies" : ["express", "async", "sockjs"],
-  "repository" : {"type": "git", "url": "git://github.com/nmalkin/wordplay.git"},
-  "main" : "server.js",
-  "version" : "1.0.0"
+  "name": "wordplay",
+  "version": "0.0.0",
+  "description": "wordplay game",
+  "main": "server.js",
+  "dependencies": {
+    "express": "~3.4.8",
+    "async": "~0.2.10",
+    "sockjs": "~0.3.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nmalkin/wordplay.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nmalkin/wordplay/issues"
+  },
+  "homepage": "https://github.com/nmalkin/wordplay"
 }
