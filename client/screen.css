@@ -8,6 +8,7 @@ body {
     text-align: center;
     font-size: 3em;
     transition: .5s linear 0;
+    color: #6EABB2;
 }
 
 #header h1 {
