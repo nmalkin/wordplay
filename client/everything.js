@@ -1,30 +1,27 @@
 // No scoreboard handling or anything here yet, but this is totally a start.
 
-function initHandshake(f) {
-    // Called on app load to perform initial handshake with the server.
-    // A function is passed as argument f to handle handshake response
-    // data, probably closeHandshake().
-    //
-    throw "Not implemented";
-}
 function closeHandshake(letters, uid, timeRemaining) {
     // Do stuff with the data returned from the server by the handshake.
     // Stores the uid in a hidden form field and prints the available
     // letters to the page.
     //
     watchTheClock(timeRemaining);
-    $( 'name="uid"' ).val(uid);
+    $( '[name="uid"]' ).val(uid);
     $( '.letters' ).append(letters); // Quick and dirty. TODO fix
 }
+
+var INTERVAL = 1000;
 function watchTheClock(timeRemaining) {
     // Monitors time remaining and calls endGame() when time is out
     //
     endTime = new Date(Date.now()+timeRemaining);
-    while (endTime > Date.now()) {
-        pass;
+    if(endTime <= Date.now()) {
+        endGame();
+    } else {
+        window.setTimeout(function() {
+             watchTheClock(timeRemaining - INTERVAL);
+        }, INTERVAL);
     }
-    // Once the time is up:
-    endGame();
 }
 
 function postWord(f) {
@@ -54,5 +51,5 @@ function handleWordConfirmation(guess, wordIsValid) {
 
 function endGame() {
     // Probably scoreboard and new game init stuff going on here
-    throw "Not implemented";
+    console.log('game ended');
 }
