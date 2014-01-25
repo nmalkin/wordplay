@@ -43,7 +43,7 @@ sockjs_client_connect.on('connection', function (conn) {
                     timeleft: 10, // If negative then time to next game
                     letters: "abcd"
                 };
-                conn.write(JSON.stringify(_gameInfo));
+                conn.write(JSON.stringify({ type: 'gameInfo', data: _gameInfo }));
                 break;
             case "checkword":
                 if (atoms.length != 2)
@@ -52,7 +52,7 @@ sockjs_client_connect.on('connection', function (conn) {
                 } else
                 {
                     var obj = checkWord(player.id, atoms[1]);
-                    conn.write(JSON.stringify(obj));
+                    conn.write(JSON.stringify({ type: 'checkWordResult', data: obj}));
                 }
                 break;
         }
