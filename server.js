@@ -1,6 +1,6 @@
 ﻿var express = require('express'),
-    async = require('async'),
-    app = express();
+	async = require('async'),
+	app = express();
 
 // load the list of words
 //  var fs = require('fs');
@@ -9,10 +9,31 @@ console.log('Loading words');
 var validWords = require('./dict/english_all.json');
 console.log('... done.');
 
+var currentWord = "";
 var clients = {};
 
-// TODO: remove possessive words (words that end with "'s" from validWords
+// utility function to shuffle an array
+function shuffle(array) {
+	var currentIndex = array.length
+		, temporaryValue
+		, randomIndex
+		;
 
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+}
 
 // gets a new ID which can be used to identify a client
 function newId() { 
@@ -29,6 +50,8 @@ function newGame() {
 	clients = new Array();
 	
 	// TODO: 2. pick new letters
+	var numLetters = 15;
+	
 	
 	// TODO: 3. notify all clients (is this needed?)
 
