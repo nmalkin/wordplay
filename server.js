@@ -9,6 +9,14 @@ var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
 // TODO: remove possessive words (words that end with "'s" from validWords
 
 
+// gets a new ID which can be used to identify a client
+function newId() { 
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+		return v.toString(16);
+	});
+}
+
 // starts a new game on the server (Clears all the state and picks new letters)
 function newGame() {
 
