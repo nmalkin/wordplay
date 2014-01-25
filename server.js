@@ -156,9 +156,7 @@ function getGame(clientId) {
 
 // web callback functions ======================================================
 
-app.get('/', function (req, res) {
-    res.send('Hello World');
-});
+app.use(express.static(__dirname + '/client'));
 
 app.get('/new', function (req, res) {
 	newGame();
@@ -184,4 +182,4 @@ app.get('/time', function(req, res) {
 	res.send({ secondsRemaining: 1 });
 });
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 8888);

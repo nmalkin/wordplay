@@ -1,12 +1,8 @@
 wordplay
+========
 
-WORDPLAY, by Stuff and stuff and people adn things.f
+To start the server:
 
-lihglihe
+    node server.js
 
-adsj,fhkdsfh dsf
-o
-
-
-
-Emma added stuffj kaldsfjlks
+The application runs, by default, on port 8888.
