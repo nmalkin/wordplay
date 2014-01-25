@@ -83,6 +83,8 @@ function getGame(clientId) {
 
 // web callback functions ======================================================
 
+app.use(express.static(__dirname + '/public'));
+
 app.get('/', function (req, res) {
     res.send('Hello World');
 });
@@ -102,4 +104,4 @@ app.get('/words', function(req, res) {
 	}
 });
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 8888);
