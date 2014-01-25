@@ -4,7 +4,10 @@
 
 // load the list of words
 var fs = require('fs');
-var array = fs.readFileSync('english_all.txt').toString().split("\n");
+var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
+
+// TODO: remove possessive words (words that end with "'s" from validWords
+
 
 // starts a new game on the server (Clears all the state and picks new letters)
 function newGame() {
