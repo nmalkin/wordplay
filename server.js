@@ -76,9 +76,9 @@ app.get('/', function (req, res) {
     res.send('Hello World');
 });
 
-app.get('/register', function(req, res)) {
+app.get('/register', function(req, res) {
 	res.send(register());
-}
+});
 
 app.get('/words', function(req, res) {
 	for (var word in array) {
