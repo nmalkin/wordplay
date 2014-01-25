@@ -5,6 +5,7 @@
 // load the list of words
 var fs = require('fs');
 var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
+var clients = new Array();
 
 // TODO: remove possessive words (words that end with "'s" from validWords
 
@@ -43,15 +44,16 @@ function checkWord(clientId, word) {
 	};
 }
 
-// returns to the client a new client ID (randomly generates & also makes sure
-// it isn't in use already
+// returns to the client a new client ID (randomly generated)
 function register() {
-
+    var id = newId();
+    clients[id] = 0;
+    return id;
 }
 
 // returns to the client their game state
 function getGame(clientId) {
-
+    return clients[id];
 }
 
 // web callback functions ======================================================
