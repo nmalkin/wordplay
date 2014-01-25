@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="jquery-1.11.0.js"></script>
+    <script src="everything.js"></script>
+    <script src="onload.js"></script>
+</head>
+<body>
+    <div id="letters">
+        <!-- Letters go here -->
+    </div>
+    <div id="guesses">
+        <!-- Guesses go here -->
+    </div>
+    <form onsubmit="return postWord()">
+        <input type="hidden" name="uid">
+        <input type="text" name="guess">
+    </form>
+</body>
+</html>
