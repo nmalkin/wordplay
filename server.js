@@ -1,13 +1,74 @@
-﻿var express = require('express'),
+﻿var HTTP_PORT = 8888;
+var WEBSOCKET_PORT = 8889;
+
+var express = require('express'),
 	async = require('async'),
-	app = express();
+	app = express(),
+    http = require('http'),
+    sockjs = require('sockjs');
+
+// Array of client information, indexed by client player ID
+var clients = {};
+// Array of clients indexed by socket connection ID
+var clientsByConnection = {};
+
+// create a sockjs server to handle incoming client requests
+var sockjs_client_connect = sockjs.createServer();
+sockjs_client_connect.on('connection', function (conn) {
+
+    console.log('connection' + conn);
+    var player = register();
+    player.socket = conn;
+    clientsByConnection[conn.id] = player;
+
+    conn.on('close', function () {
+        console.log('close ' + conn);
+        // remove the client from our arrays
+        var player = clientsByConnection[conn.id];
+        delete clients[player.id];
+        delete clientsByConnection[conn.id];
+    });
+
+    conn.on('data', function (message) {
+        console.log('message ' + conn,
+                    message);
+        var player = clientsByConnection[conn.id];
+        atoms = message.split(";");
+        if (atoms.length)
+        switch (atoms[0]) {
+            case "register":
+                // todo
+                // return current game time left, valid letters in current game
+                var _gameInfo = {
+                    timeleft: 10, // If negative then time to next game
+                    letters: "abcd"
+                };
+                conn.write(JSON.stringify(_gameInfo));
+                break;
+            case "checkword":
+                if (atoms.length != 2)
+                {
+                    conn.write("ERROR: Could not parse message:" + message);
+                } else
+                {
+                    var obj = checkWord(player.id, atoms[1]);
+                    conn.write(JSON.stringify(obj));
+                }
+                break;
+        }
+    });
+});
+
+// Now connect the sockjs server to the http server on a specific port
+var server = http.createServer();
+sockjs_client_connect.installHandlers(server, { prefix: '/client-connect' });
+server.listen(process.env.PORT || WEBSOCKET_PORT); // Listen on the given port number
 
 // load the list of words
 //  var fs = require('fs');
 //  var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
 console.log('Loading words');
-var anagrams = require('./dict/english_all.json');
-var validWords = Object.keys(anagrams);
+var validWords = require('./dict/english_all.json');
 console.log('... done.');
 
 var currentWord = "";
@@ -120,22 +181,9 @@ function newGame() {
 	// 1. clear all the state
 	clients = new Array();
 	
-	// 2. pick new letters
+	// TODO: 2. pick new letters
 	var numLetters = 15;
-	var allLetters = "";
-	while (allLetters.length < numLetters) {
-		// get a list of possible words that would bring us closer to our goal of numLetters letters
-		var availableWords = validWords.filter(function(element, index, array) { 
-			return (element.length + allLetters.length <= numLetters); 
-		});
-		
-		if (availableWords.length < 1)
-			availableWords = "abcdefghijklmnopqrstuvwxyz".split('');
-		
-		// append a random word from the list of available words
-		var i = Math.floor(Math.random() * availableWords.length);
-		allLetters += availableWords[i];
-	}
+	
 	
 	// TODO: 3. notify all clients (is this needed?)
 	currentWord = allLetters;
@@ -178,7 +226,8 @@ function register() {
     var _player = {
 		id: _id,
 		score: 0,
-		foundWords: new Array()
+		foundWords: new Array(),
+        socket: 0
 	};
 	clients[_id] = (_player);
 	return _player;
@@ -190,12 +239,11 @@ function getGame(clientId) {
 }
 
 // web callback functions ======================================================
-
 app.use(express.static(__dirname + '/client'));
 
-app.get('/new', function (req, res) {
-	newGame();
-	res.send({ word: currentWord, len: currentWord.length, ng: getAnagrams(currentWord) });
+/*
+app.get('/', function (req, res) {
+    res.send('Hello World');
 });
 
 app.get('/register', function(req, res) {
@@ -223,5 +271,4 @@ app.get('/time', function(req, res) {
 
 newGame();
 //console.log(getAnagrams(currentWord));
-
-app.listen(process.env.PORT || 8888);
+app.listen(process.env.PORT || HTTP_PORT);
