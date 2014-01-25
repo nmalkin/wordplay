@@ -11,63 +11,65 @@
     <div id="header">
         <h1>wordplay</h1>
     </div>
-    <div id="board">
-        <div id="letters">
-            <!-- Letters go here -->
-            <ul>
-                <li>a</li>
-                <li>s</li>
-                <li>d</li>
-                <li>f</li>
-                <li>g</li>
-                <li>h</li>
-                <li>j</li>
-                <li>k</li>
-                <li>l</li>
-            </ul>
-        </div>
-        <div id="bottom-panel">
-            <div class="infobox">
-                <p class="label">Time</p>
-                <p class="num" id="time">--</p>
-            </div>
-            <div class="infobox">
-                <p class="label">Score</p>
-                <p class="num" id="score">--</p>
-            </div>
-            <div id="form">
-                <form onsubmit="return postWord()">
-                    <input type="hidden" name="uid">
-                    <input type="text" name="guess">
-                </form>
-            </div>
-        </div>
-    </div>
-    <div id="bottom">
-        <div id="guesses">
-            <p class="label">Your guesses</p>
-            <!-- Guesses go here -->
-            <ul>
-                <li>foo</li>
-                <li>bar</li>
-                <li>baz</li>
-            </ul>
-        </div>
-        <div id="standings">
-            <p class="label">Last game:</p>
-            <div id="leaders">
-                <p class="label">High scores:</p>
+    <div id="container">
+        <div id="board">
+            <div id="letters">
+                <!-- Letters go here -->
                 <ul>
-                    <li>foo</li>
+                    <li>a</li>
+                    <li>s</li>
+                    <li>d</li>
+                    <li>f</li>
+                    <li>g</li>
+                    <li>h</li>
+                    <li>j</li>
+                    <li>k</li>
+                    <li>l</li>
+                </ul>
+            </div>
+            <div id="bottom-panel">
+                <div class="infobox inset" id="time">
+                    <p class="label">Time</p>
+                    <p class="num">0</p>
+                </div>
+                <div class="infobox inset" id="score">
+                    <p class="label">Score</p>
+                    <p class="num">00</p>
+                </div>
+                <div id="form">
+                    <form onsubmit="return postWord()">
+                        <input type="hidden" name="uid">
+                        <input type="text" name="guess">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="bottom">
+            <div id="guesses">
+                <p class="label">Your guesses: </p>
+                <!-- Guesses go here -->
+                <ul>
+                    <li class="wrong">foo</li>
                     <li>bar</li>
                     <li>baz</li>
                 </ul>
             </div>
-            <div id="standing">
-                <p class="label">Your score:</p>
-                <p class="num">666</p>
-                <p class="label">Your standing:</p>
-                <p class="num">10%</p> 
+            <div id="standings" class="inset">
+                <p class="label"><b>Last game:</b></p>
+                <div id="leaders">
+                    <p class="label">High scores:</p>
+                    <ul>
+                        <li>foo</li>
+                        <li>bar</li>
+                        <li>baz</li>
+                    </ul>
+                </div>
+                <div id="standing">
+                    <p class="label">Your score:</p>
+                    <p class="num">666</p>
+                    <p class="label">Your standing:</p>
+                    <p class="num">10%</p> 
+                </div>
             </div>
         </div>
     </div>

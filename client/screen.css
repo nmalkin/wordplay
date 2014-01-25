@@ -1,0 +1,128 @@
+body {
+    font-family: 'Open Sans';
+    font-size: 16px;
+    background-color: #F5FEFF;
+}
+
+#header {
+    text-align: center;
+    font-size: 3em;
+}
+
+#header h1 {
+    font-family: 'Pacifico';
+}
+
+#board, #bottom {
+    float: left;
+}
+
+#board {
+    border-radius: 2em;
+    padding: 1.5em;
+    background-color: #B2825D
+}
+
+.infobox {
+    padding: 0 1em;
+}
+
+input[name="guess"] {
+    margin: 0;
+    height: 50px;
+    font-size: 38px;
+}
+
+#score {
+    margin: 0 .5em;
+}
+
+#letters ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#letters:after, #board:after { 
+   content: "";
+   display: block; 
+   clear: left;
+}
+
+#bottom {
+    clear: left;
+    margin: 1.5em 0 5em;
+}
+
+#letters li {
+    border-radius: .25em;
+    float: left;
+    font-size: 3em;
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+    background-color: #FFD6B7;
+    margin: .1em;
+}
+
+#bottom-panel div {
+    float: left;
+}
+
+#bottom-panel {
+    margin-top: 1em;
+}
+
+.infobox p {
+    margin: .2em 0;
+}
+
+.infobox .num {
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.infobox .label {
+    font-size: .8em;
+}
+
+.label {
+    text-transform: uppercase;
+}
+
+#guesses, #standings, #leaders, #standing {
+    float: left;
+}
+
+#standings {
+    padding: 1em;
+}
+
+ul .wrong {
+    background-color: red;
+    text-decoration: line-through;
+}
+
+#guesses {
+    width: 15em;
+    margin-right: 2em;
+}
+
+.inset {
+    background-color: #fff;
+    border-radius: .75em;
+    box-shadow: inset .2em .2em #ccc;
+}
+
+#time {
+    margin-left: .25em;
+}
+
+#standing {
+    margin-left: 2em;
+}
+
+#container {
+    margin: 0 auto;
+    display: table;
+}
