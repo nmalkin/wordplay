@@ -1,20 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href='http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='screen.css' rel='stylesheet' type='text/css'>
     <script src="jquery-1.11.0.js"></script>
     <script src="everything.js"></script>
     <script src="onload.js"></script>
 </head>
 <body>
-    <div id="letters">
-        <!-- Letters go here -->
+    <div id="header">
+        <h1>wordplay</h1>
     </div>
-    <div id="guesses">
-        <!-- Guesses go here -->
+    <div id="board">
+        <div id="letters">
+            <!-- Letters go here -->
+            <ul>
+                <li>a</li>
+                <li>s</li>
+                <li>d</li>
+                <li>f</li>
+                <li>g</li>
+                <li>h</li>
+                <li>j</li>
+                <li>k</li>
+                <li>l</li>
+            </ul>
+        </div>
+        <div id="bottom-panel">
+            <div class="infobox">
+                <p class="label">Time</p>
+                <p class="num" id="time">--</p>
+            </div>
+            <div class="infobox">
+                <p class="label">Score</p>
+                <p class="num" id="score">--</p>
+            </div>
+            <div id="form">
+                <form onsubmit="return postWord()">
+                    <input type="hidden" name="uid">
+                    <input type="text" name="guess">
+                </form>
+            </div>
+        </div>
     </div>
-    <form onsubmit="return postWord()">
-        <input type="hidden" name="uid">
-        <input type="text" name="guess">
-    </form>
+    <div id="bottom">
+        <div id="guesses">
+            <p class="label">Your guesses</p>
+            <!-- Guesses go here -->
+            <ul>
+                <li>foo</li>
+                <li>bar</li>
+                <li>baz</li>
+            </ul>
+        </div>
+        <div id="standings">
+            <p class="label">Last game:</p>
+            <div id="leaders">
+                <p class="label">High scores:</p>
+                <ul>
+                    <li>foo</li>
+                    <li>bar</li>
+                    <li>baz</li>
+                </ul>
+            </div>
+            <div id="standing">
+                <p class="label">Your score:</p>
+                <p class="num">666</p>
+                <p class="label">Your standing:</p>
+                <p class="num">10%</p> 
+            </div>
+        </div>
+    </div>
 </body>
 </html>
