@@ -22,6 +22,7 @@ function newId() {
 function newGame() {
 
 	// TODO: 1. clear all the state
+	clients = new Array();
 	
 	// TODO: 2. pick new letters
 	
@@ -32,15 +33,30 @@ function newGame() {
 // called when a client wants to check if they got the word correctly
 function checkWord(clientId, word) {
 
-	// TODO: get the client's old score
+	var player = clients[clientId];
 
-	// TODO: check the word against the wordlist
-
+	var _oldScore = player.score;
+	var _curScore = 0;
+	
+	// TODO: check the word against the list of valid words
+	var isValidWord = false;
+	if (validWords.indexOf(word) >= 0)
+	{
+		_curScore = length(word);
+	}
+	
+	// TODO: update the player's score on the server side
+	// player.score = _oldScore + _curScore;
+	
+	// TODO: update the list of words that the player found
+	// player.foundWords.append(word);
+	
+	// TODO: save the player object if necessary (probably not until later, if we are using a database)
+	
 	return {
-		correct: true,
-		oldScore: 0,
-		newScore: 0, // TODO: insert the new score
-		allFoundWords: []
+		correct: isValidWord,
+		newScore: player.score, 
+		allFoundWords: player.foundWords
 	};
 }
 
@@ -60,6 +76,10 @@ function getGame(clientId) {
 
 app.get('/', function (req, res) {
     res.send('Hello World');
+});
+
+app.get('/register', function(req, res) {
+	res.send(register());
 });
 
 app.get('/words', function(req, res) {
