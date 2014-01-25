@@ -1,9 +1,9 @@
-var DEBUG = TRUE;
-var PORT = 8888;
+var DEBUG = true;
+var PORT = 8889;
 var socket = new SockJS('http://localhost:' + PORT + '/client-connect');
 
 var log = function(message) {
-    if(debug) {
+    if(DEBUG) {
         console.log(message);
     }
 };
@@ -13,11 +13,11 @@ socket.onopen = function() {
     socket.send('register');
 };
 
-sock.onmessage = function(message) {
+socket.onmessage = function(message) {
     log('received data: ' + message);
     var data = message.data;
 };
 
-sock.onclose = function() {
+socket.onclose = function() {
     log('connection closed');
 };

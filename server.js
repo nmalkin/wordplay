@@ -1,4 +1,7 @@
-﻿var express = require('express'),
+﻿var HTTP_PORT = 8888;
+var WEBSOCKET_PORT = 8889;
+
+var express = require('express'),
 	async = require('async'),
 	app = express(),
     http = require('http'),
@@ -59,8 +62,7 @@ sockjs_client_connect.on('connection', function (conn) {
 // Now connect the sockjs server to the http server on a specific port
 var server = http.createServer();
 sockjs_client_connect.installHandlers(server, { prefix: '/client-connect' });
-server.listen(process.env.PORT || 8888); // Listen on the given port number
-console.log('Listening on port ' + (process.env.PORT || 8888));
+server.listen(process.env.PORT || WEBSOCKET_PORT); // Listen on the given port number
 
 // load the list of words
 //  var fs = require('fs');
@@ -165,6 +167,8 @@ function getGame(clientId) {
 }
 
 // web callback functions ======================================================
+app.use(express.static(__dirname + '/client'));
+
 /*
 app.get('/', function (req, res) {
     res.send('Hello World');
@@ -185,5 +189,6 @@ app.get('/words', function(req, res) {
 	}
 });
 
-app.listen(process.env.PORT);
 */
+
+app.listen(process.env.PORT || HTTP_PORT);
