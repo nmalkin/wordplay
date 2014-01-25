@@ -5,7 +5,7 @@
 // load the list of words
 var fs = require('fs');
 var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
-var clients = new Array();
+var clients = {};
 
 // TODO: remove possessive words (words that end with "'s" from validWords
 
@@ -68,7 +68,7 @@ function register() {
 		score: 0,
 		foundWords: new Array()
 	};
-	clients[_id] = _player;
+	clients[_id] = (_player);
 	return _player;
 }
 
@@ -85,6 +85,11 @@ app.get('/', function (req, res) {
 
 app.get('/register', function(req, res) {
 	res.send(register());
+});
+
+app.get('/listPlayers', function(req, res) {
+	//res.send("Players: " + clients.length);
+	res.send(clients);
 });
 
 app.get('/words', function(req, res) {
