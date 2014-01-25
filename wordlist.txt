@@ -1,2 +1,0 @@
-ISPELL list
-http://wordlist.sourceforge.net/

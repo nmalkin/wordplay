@@ -3,8 +3,12 @@
     app = express();
 
 // load the list of words
-var fs = require('fs');
-var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
+//  var fs = require('fs');
+//  var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
+console.log('Loading words');
+var validWords = require('./dict/english_all.json');
+console.log('... done.');
+
 var clients = {};
 
 // TODO: remove possessive words (words that end with "'s" from validWords
