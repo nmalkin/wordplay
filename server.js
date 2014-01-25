@@ -62,9 +62,14 @@ function checkWord(clientId, word) {
 
 // returns to the client a new client ID (randomly generated)
 function register() {
-    var id = newId();
-    clients[id] = 0;
-    return id;
+    var _id = newId();
+    var _player = {
+		id: _id,
+		score: 0,
+		foundWords: new Array()
+	};
+	clients[_id] = _player;
+	return _player;
 }
 
 // returns to the client their game state
