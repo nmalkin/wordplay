@@ -1,13 +1,74 @@
-﻿var express = require('express'),
+﻿var HTTP_PORT = 8888;
+var WEBSOCKET_PORT = 8889;
+
+var express = require('express'),
 	async = require('async'),
-	app = express();
+	app = express(),
+    http = require('http'),
+    sockjs = require('sockjs');
+
+// Array of client information, indexed by client player ID
+var clients = {};
+// Array of clients indexed by socket connection ID
+var clientsByConnection = {};
+
+// create a sockjs server to handle incoming client requests
+var sockjs_client_connect = sockjs.createServer();
+sockjs_client_connect.on('connection', function (conn) {
+
+    console.log('connection' + conn);
+    var player = register();
+    player.socket = conn;
+    clientsByConnection[conn.id] = player;
+
+    conn.on('close', function () {
+        console.log('close ' + conn);
+        // remove the client from our arrays
+        var player = clientsByConnection[conn.id];
+        delete clients[player.id];
+        delete clientsByConnection[conn.id];
+    });
+
+    conn.on('data', function (message) {
+        console.log('message ' + conn,
+                    message);
+        var player = clientsByConnection[conn.id];
+        atoms = message.split(";");
+        if (atoms.length)
+        switch (atoms[0]) {
+            case "register":
+                // todo
+                // return current game time left, valid letters in current game
+                var _gameInfo = {
+                    timeleft: 10, // If negative then time to next game
+                    letters: "abcd"
+                };
+                conn.write(JSON.stringify(_gameInfo));
+                break;
+            case "checkword":
+                if (atoms.length != 2)
+                {
+                    conn.write("ERROR: Could not parse message:" + message);
+                } else
+                {
+                    var obj = checkWord(player.id, atoms[1]);
+                    conn.write(JSON.stringify(obj));
+                }
+                break;
+        }
+    });
+});
+
+// Now connect the sockjs server to the http server on a specific port
+var server = http.createServer();
+sockjs_client_connect.installHandlers(server, { prefix: '/client-connect' });
+server.listen(process.env.PORT || WEBSOCKET_PORT); // Listen on the given port number
 
 // load the list of words
 //  var fs = require('fs');
 //  var validWords = fs.readFileSync('english_all.txt').toString().split("\n");
 console.log('Loading words');
-var anagrams = require('./dict/english_all.json');
-var validWords = Object.keys(anagrams);
+var validWords = require('./dict/english_all.json');
 console.log('... done.');
 
 var currentWord = "";
@@ -19,20 +80,21 @@ function sortLetters(word) { return word.split('').sort().join(''); }
 
 function getAnagrams(word) {
 	// 1. sort the letters
-	var sortedwords = [];
+	var sortedwords = {};
 	for (var i = 0; i < validWords.length; ++i)
 	{
 		var w = validWords[i];
 		var sortedword = sortLetters(w);
-		if (sortedwords[sortedword] === undefined)
+		if (sortedwords[sortedword] == undefined)
 			sortedwords[sortedword] = new Array();
 		sortedwords[sortedword].push(w);
 	}
 	//console.log(sortedwords);
-	
-	var anagrams = new Array();
-	var wc = ""+sortLetters(word);
+	/*
+	var anagrams = [];
+	var wc = sortLetters(word);
 	console.log(word);
+	console.log(sortedwords);
 	while (wc.length >= 3)
 	{
 		if (sortedwords[wc] != undefined) {
@@ -44,8 +106,41 @@ function getAnagrams(word) {
 		}
 		wc = wc.substring(0, wc.length - 1);
 	}
-	
+	*/
 	return anagrams;
+}
+
+function arrayRemoveIndex(array, index)
+{
+	var newArray = new Array();
+	for (var i = 0; i < index; ++i)
+		newArray[i] = array[i];
+	for (var i = index; i < array.length; ++i)
+		newArray[i-1] = array[i];
+	return newArray;
+}
+
+function isAnagramOfCurrentWord(word)
+{
+	console.log(word);
+
+	var array1 = word.split('');
+	var array2 = currentWord.split(''); 
+	var i=0, j=0;
+	while (i < array1.length)
+	{
+		j = array2.indexOf(array1[i]);
+		if (j >= 0)
+			array2 = arrayRemoveIndex(array2, j);
+		else 
+			return false; // user used an invalid letter
+		++i;
+	}
+	
+	if (validWords.indexOf(word) >= 0) {
+		return true;
+	}
+	return false;
 }
 
 
@@ -82,29 +177,17 @@ function newId() {
 
 // starts a new game on the server (Clears all the state and picks new letters)
 function newGame() {
-
+	console.log("newGame");
 	// 1. clear all the state
 	clients = new Array();
 	
-	// 2. pick new letters
+	// TODO: 2. pick new letters
 	var numLetters = 15;
-	var allLetters = "";
-	while (allLetters.length < numLetters) {
-		// get a list of possible words that would bring us closer to our goal of numLetters letters
-		var availableWords = validWords.filter(function(element, index, array) { 
-			return (element.length + allLetters.length <= numLetters); 
-		});
-		
-		if (availableWords.length < 1)
-			availableWords = "abcdefghijklmnopqrstuvwxyz".split('');
-		
-		// append a random word from the list of available words
-		var i = Math.floor(Math.random() * availableWords.length);
-		allLetters += availableWords[i];
-	}
+	
 	
 	// TODO: 3. notify all clients (is this needed?)
 	currentWord = allLetters;
+	console.log(currentWord);
 }
 
 // called when a client wants to check if they got the word correctly
@@ -143,7 +226,8 @@ function register() {
     var _player = {
 		id: _id,
 		score: 0,
-		foundWords: new Array()
+		foundWords: new Array(),
+        socket: 0
 	};
 	clients[_id] = (_player);
 	return _player;
@@ -155,12 +239,11 @@ function getGame(clientId) {
 }
 
 // web callback functions ======================================================
-
 app.use(express.static(__dirname + '/client'));
 
-app.get('/new', function (req, res) {
-	newGame();
-	res.send({ word: currentWord, len: currentWord.length, ng: getAnagrams(currentWord) });
+/*
+app.get('/', function (req, res) {
+    res.send('Hello World');
 });
 
 app.get('/register', function(req, res) {
@@ -178,8 +261,14 @@ app.get('/words', function(req, res) {
 	}
 });
 
+app.get('/check', function(req, res) {
+	res.send({ cword: currentWord, isAnagram: isAnagramOfCurrentWord(req.query.id) });
+});
+
 app.get('/time', function(req, res) { 
 	res.send({ secondsRemaining: 1 });
 });
 
-app.listen(process.env.PORT || 8888);
+newGame();
+//console.log(getAnagrams(currentWord));
+app.listen(process.env.PORT || HTTP_PORT);
