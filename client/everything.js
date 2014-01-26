@@ -7,13 +7,17 @@ function closeHandshake(letters, uid, timeRemaining) {
     //
     watchTheClock(timeRemaining);
     $( '[name="uid"]' ).val(uid);
-    $( '.letters' ).append(letters); // Quick and dirty. TODO fix
+    $( '#letters ul' ).empty();
+    for (var i = 0; i<letters.length; ++i) {
+        $( '#letters ul' ).append('<li>'+letters.charAt(i)+'</li>');
+    }
 }
 
 var INTERVAL = 1000;
 function watchTheClock(timeRemaining) {
     // Monitors time remaining and calls endGame() when time is out
     //
+    $( '#time .num' ).empty().append(Math.floor(timeRemaining/1000));
     endTime = new Date(Date.now()+timeRemaining);
     if(endTime <= Date.now()) {
         endGame();
