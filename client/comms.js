@@ -15,10 +15,21 @@ socket.onopen = function() {
 };
 
 socket.onmessage = function(message) {
-    log('received data: ' + message);
+    log('received data: ' + message.data);
     var data = JSON.parse(message.data);
-    if (data.type == "gameInfo") {
-        closeHandshake(data.data.letters, "foo", data.data.timeleft);
+    if(! ('type' in data)) {
+        console.log('received bad data from the server');
+        return;
+    }
+
+    var payload = data.data;
+    switch(data.type) {
+        case 'gameInfo':
+            var uid = 'TEST';
+            closeHandshake(payload, uid, payload.timeleft * 10000);
+            break;
+        case 'checkWordResult':
+            break;
     }
 };
 
