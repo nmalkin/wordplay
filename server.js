@@ -49,7 +49,7 @@ sockjs_client_connect.on('connection', function (conn) {
                 conn.write(JSON.stringify({ type: 'gameInfo', data: _gameInfo }));
                 break;
             case "checkword":
-                if (atoms.length != 2)
+                if (atoms.length != 3)
                 {
                     conn.write("ERROR: Could not parse message:" + message);
                 } else
@@ -220,7 +220,7 @@ function checkWord(clientId, word) {
 	var isValidWord = false;
 	if (validWords.indexOf(word) >= 0)
 	{
-		_curScore = length(word);
+		_curScore = word.length;
 	}
 	
 	// TODO: update the player's score on the server side

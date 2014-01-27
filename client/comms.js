@@ -9,6 +9,10 @@ var log = function(message) {
     }
 };
 
+function checkWord(uid, guess) {
+    socket.send('checkword;'+guess+';'+uid);
+}
+
 socket.onopen = function() {
     log('connection opened');
     socket.send('register');

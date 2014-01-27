@@ -1,5 +1,9 @@
 // No scoreboard handling or anything here yet, but this is totally a start.
 
+$("form").submit(function(e) {
+    e.preventDefault();
+});
+
 function register(uid) {
     // Do stuff with the data returned from the server by the handshake.
     // Stores the uid in a hidden form field and prints the available
@@ -31,19 +35,18 @@ function watchTheClock(timeRemaining) {
     }
 }
 
-function postWord(f) {
+function postWord() {
     // Called when the form is submitted. Argument f is a function to
     // handle word confirmation/rejection from the server.
     //
-    $( '#header' ).css('font-size', '1em');
-    throw "Not implemented";
-    var uid = $( 'name="uid"' ).val();
-    var guess = $( 'name="guess"' ).val();
-    // Send the uid and guess to the server here, calling f() with the
-    // response data
-    $( 'name="guess"' ).val("");    // Clear the text box
-    // To override form submit action, must:
-    return false;
+    $( '#header' ).css('font-size', '1.5em');
+    var uid = $( '[name="uid"]' ).val();
+    var guess = $( '[name="guess"]' ).val();
+
+    checkWord(uid, guess);
+
+    $( '[name="guess"]' ).val("");    // Clear the text box
+
 }
 function handleWordConfirmation(guess, wordIsValid) {
     // Do UI stuff with word confirmation info returned from the server.
