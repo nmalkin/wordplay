@@ -35,7 +35,7 @@ socket.onmessage = function(message) {
             newGame(payload.letters, payload.timeleft * 10000);
             break;
         case 'checkWordResult':
-            break;
+            handleWordConfirmation(payload.correct);
     }
 };
 

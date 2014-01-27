@@ -7,9 +7,8 @@ body {
 #header {
     text-align: center;
     font-size: 3em;
-    transition: .5s linear 0;
     color: #6EABB2;
-    text-shadow: #FACAE4 .1em .1em;
+    text-shadow: #FFEDF7 .1em .1em;
 }
 
 #header h1 {
@@ -102,7 +101,8 @@ input[name="guess"] {
 }
 
 ul .wrong {
-    background-color: red;
+    color: #C70E72;
+    font-weight: 600;
     text-decoration: line-through;
 }
 

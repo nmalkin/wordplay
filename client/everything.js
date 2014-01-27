@@ -45,15 +45,11 @@ function postWord() {
     checkWord(uid, guess);
 
     $( '[name="guess"]' ).val("");    // Clear the text box
+    $( '#guesses ul').prepend('<li>'+guess+'</li>');
 }
-function handleWordConfirmation(guess, wordIsValid) {
-    // Do UI stuff with word confirmation info returned from the server.
-    //
-    // Again, quick and dirty. TODO: use actual css & markup
+function handleWordConfirmation(wordIsValid) {
     if (!wordIsValid) {
-        $( '.letters' ).append('<strike>'+guess+'</strike>');
-    } else {
-        $( '.letters' ).append(guess);
+        $( '#guesses ul li:first-child' ).addClass('wrong');
     }
 }
 
