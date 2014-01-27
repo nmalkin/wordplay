@@ -38,10 +38,13 @@ sockjs_client_connect.on('connection', function (conn) {
         switch (atoms[0]) {
             case "register":
                 // todo
+                // store that uid somewhere
+                conn.write(JSON.stringify({ type: 'registration', data: {uid: newId()} }));
+                // todo
                 // return current game time left, valid letters in current game
                 var _gameInfo = {
                     timeleft: 10, // If negative then time to next game
-                    letters: "abcd"
+                    letters: "nagaram"
                 };
                 conn.write(JSON.stringify({ type: 'gameInfo', data: _gameInfo }));
                 break;

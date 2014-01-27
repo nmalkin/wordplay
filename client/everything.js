@@ -1,12 +1,15 @@
 // No scoreboard handling or anything here yet, but this is totally a start.
 
-function closeHandshake(letters, uid, timeRemaining) {
+function register(uid) {
     // Do stuff with the data returned from the server by the handshake.
     // Stores the uid in a hidden form field and prints the available
     // letters to the page.
     //
-    watchTheClock(timeRemaining);
     $( '[name="uid"]' ).val(uid);
+}
+
+function newGame(letters, timeRemaining){
+    watchTheClock(timeRemaining);
     $( '#letters ul' ).empty();
     for (var i = 0; i<letters.length; ++i) {
         $( '#letters ul' ).append('<li>'+letters.charAt(i)+'</li>');

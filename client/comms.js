@@ -24,9 +24,11 @@ socket.onmessage = function(message) {
 
     var payload = data.data;
     switch(data.type) {
+        case 'registration':
+            register(payload.uid);
+            break;
         case 'gameInfo':
-            var uid = 'TEST';
-            closeHandshake(payload.letters, uid, payload.timeleft * 10000);
+            newGame(payload.letters, payload.timeleft * 10000);
             break;
         case 'checkWordResult':
             break;
