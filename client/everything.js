@@ -39,14 +39,12 @@ function postWord() {
     // Called when the form is submitted. Argument f is a function to
     // handle word confirmation/rejection from the server.
     //
-    $( '#header' ).css('font-size', '1.5em');
     var uid = $( '[name="uid"]' ).val();
     var guess = $( '[name="guess"]' ).val();
 
     checkWord(uid, guess);
 
     $( '[name="guess"]' ).val("");    // Clear the text box
-
 }
 function handleWordConfirmation(guess, wordIsValid) {
     // Do UI stuff with word confirmation info returned from the server.

@@ -9,6 +9,7 @@ body {
     font-size: 3em;
     transition: .5s linear 0;
     color: #6EABB2;
+    text-shadow: #FACAE4 .1em .1em;
 }
 
 #header h1 {
