@@ -26,7 +26,7 @@ socket.onmessage = function(message) {
     switch(data.type) {
         case 'gameInfo':
             var uid = 'TEST';
-            closeHandshake(payload, uid, payload.timeleft * 10000);
+            closeHandshake(payload.letters, uid, payload.timeleft * 10000);
             break;
         case 'checkWordResult':
             break;
