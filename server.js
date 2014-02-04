@@ -83,6 +83,33 @@ var gameLength = 60 /* seconds */ ;
 
 function sortLetters(word) { return word.split('').sort().join(''); }
 
+function getUnique(arr) {
+	var u = {}, a = [];
+	for (var i = 0, l = arr.length; i < l; ++i){
+		if (u.hasOwnProperty(arr[i])) {
+			continue;
+		}
+		a.push(arr[i]);
+		u[arr[i]] = 1;
+	}
+	return a;
+}
+
+function getAllSubstrings(original) {
+	var ss = [];
+	for (var i = 0; i < original.length; ++i)
+	for (var j = original.length; j > i; --j)
+		ss.push(original.slice(i, j));
+	return ss;
+}
+
+function getLookupKeysForWord(word) {
+	var x = getAllSubstrings(sortLetters(word));
+	for (var i = 0; i < x.length; ++i)
+		x[i] = x[i].toUpperCase();
+	return getUnique(x);
+}
+
 function getAnagrams(word) {
 	// 1. sort the letters
 	var sortedwords = {};
